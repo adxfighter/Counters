@@ -8,8 +8,5 @@ Java8, Spring Boot, Hibernate, Maven, MySql
 mvn clean install
 
 # To run
-java ?jar counters2.jar
-
-# Known issues
-JSP pages in webapp aren?t shown and not found without build
+java -jar counters2.war
 
