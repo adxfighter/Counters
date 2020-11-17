@@ -67,6 +67,9 @@
         <td height="50"><a href="print">Страница печати</a></td>
     </tr>
     <tr>
+        <td height="50"><a href="printDelta">Страница печати с расходом</a></td>
+    </tr>
+    <tr>
         <td height="50"><a href="printAndPrices">Страница печати с ценами</a></td>
     </tr>
     <tr>

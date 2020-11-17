@@ -1,12 +1,9 @@
 package com.counters.controllers;
 
+import com.counters.model.*;
 import com.counters.model.BO.CounterBO;
 import com.counters.model.BO.PokazanieBO;
 import com.counters.model.BO.PriceBO;
-import com.counters.model.Counter;
-import com.counters.model.Pokazanie;
-import com.counters.model.Price;
-import com.counters.model.UsedDelta;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,6 +46,18 @@ public class PrintController {
 
     }
 
+    @RequestMapping(value = "/printDelta", method = RequestMethod.GET)
+    public ModelAndView printDelta() throws SQLException {
+
+        ModelAndView model = new ModelAndView("printDelta");
+        model.addObject("isCorrect", isLastPokazaniaListCorrect());
+        model.addObject("pokazaniaPair", getPokazaniaPairList());
+        model.addObject("address", address);
+
+        return model;
+
+    }
+
     @RequestMapping(value = "/printAndPrices", method = RequestMethod.GET)
     public ModelAndView printPokazaniaAndPrices() throws SQLException {
 
@@ -69,6 +78,26 @@ public class PrintController {
                 collect(Collectors.toList());
 
         return pokazanieList;
+    }
+
+    private List<PokazaniePair> getPokazaniaPairList() throws SQLException {
+        List<Counter> countersList = counterBO.getListOfCounters();
+
+        List<PokazaniePair> pokazaniePairList = countersList.stream().
+                map(this::getPokazaniaByCounter).
+                map(list -> new PokazaniePair(list.get(1), list.get(0))).
+                collect(Collectors.toList());
+
+        return pokazaniePairList;
+    }
+
+    private List<Pokazanie> getPokazaniaByCounter(Counter counter) {
+        try {
+            return pokazanieBO.getPokazaniaByCounter(counter);
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
+            return null;
+        }
     }
 
     private Pokazanie getLastPokazanieByCounter(Counter counter) {
