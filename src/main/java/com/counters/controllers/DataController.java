@@ -49,8 +49,27 @@ public class DataController {
         ModelAndView model = new ModelAndView("data", "command", new Pokazanie());
         model.addObject("listCountersNames", listCountersNames);
 
+        List<Counter> counterList = counterBO.getListOfCounters();
+
+        Map<String,Double> pokazanieMap = getLastPokazaniaMap(counterList);
+
+        model.addObject("lastPokazaniaMap", pokazanieMap);
+
         return model;
 
+    }
+
+    private Map<String,Double> getLastPokazaniaMap(List<Counter> counterList) {
+        Map<String,Double> pokazanieMap = new HashMap<>();
+
+        counterList.stream().forEach(counter -> {
+            try {
+                pokazanieMap.put(counter.getCounterName(), ControllersUtils.getLastPokazanieByCounter(counter, pokazanieBO).getData());
+            } catch (SQLException e) {
+                logger.log(Level.SEVERE, "ERROR: ", e);
+            }
+        });
+        return pokazanieMap;
     }
 
 

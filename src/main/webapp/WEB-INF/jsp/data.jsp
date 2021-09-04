@@ -43,7 +43,7 @@
 
 <div class="container common-template">
 
-    <form class="form-horizontal pull-left" target="_blank"
+    <form class="form-horizontal pull-left"
           accept-charset="UTF-8" method="POST" action="addData">
 
         <div class="form-group">
@@ -61,7 +61,7 @@
         <div class="form-group">
             <label for="data" class="col-sm-2 control-label">Введите данные</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" id="data" name="data"
+                <input type="text" class="form-control" id="data" name="data" onclick='getLastPokazanie()'
                        placeholder="Введите показание"/>
             </div>
         </div>
@@ -73,6 +73,17 @@
             var monthe = getDatee.getMonth();
             var yeare = getDatee.getFullYear();
             var day = getDatee.getDate();
+
+            var map = new Map();
+            <c:forEach var="type" items="${lastPokazaniaMap}">
+               map.set("${type.key}","${type.value}");
+            </c:forEach>
+
+            function getLastPokazanie() {
+                let counter = document.getElementById("selectCounter").value;
+                document.getElementById("data").value = map.get(counter);
+                return false;
+            }
 
             function isEmpty(val) {
                 return (val === undefined || val == null || val.length <= 0) ? true : false;
