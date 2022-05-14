@@ -54,17 +54,6 @@
 
         </dependency>
 
-
-        <!--
-              <Bootstrap>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
-
-        -->
-
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
@@ -132,11 +121,6 @@
         <!-- **********************************************************************
              ** 				OTHER DEPENDENCIES 								 **
              ********************************************************************** -->
-        <!--   <dependency>
-              <groupId>org.slf4j</groupId>
-              <artifactId>slf4j-jcl</artifactId>
-              <version>${slf4j.version}</version>
-          </dependency>  -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -252,12 +236,6 @@
         </dependency>
 
     </dependencies>
-    <scm>
-        <connection>scm:git:ssh://git.vm.griddynamics.net:/home/adementiev/Counters</connection>
-        <developerConnection>scm:git:ssh://git.vm.griddynamics.net:/home/adementiev/Counters</developerConnection>
-        <url>scm:git:ssh://git.vm.griddynamics.net:/home/adementiev/Counters</url>
-        <tag>counters-1.1.2</tag>
-    </scm>
 
     <build>
         <plugins>
