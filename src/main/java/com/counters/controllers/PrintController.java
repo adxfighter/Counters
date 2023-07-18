@@ -32,7 +32,7 @@ public class PrintController {
     CounterBO counterBO;
 
     @Autowired
-    String address;
+    Address address;
 
     @RequestMapping(value = "/print", method = RequestMethod.GET)
     public ModelAndView printPokazania() throws SQLException {
@@ -40,7 +40,7 @@ public class PrintController {
         ModelAndView model = new ModelAndView("print");
         model.addObject("isCorrect", isLastPokazaniaListCorrect());
         model.addObject("pokazania", getLastPokazaniaList());
-        model.addObject("address", address);
+        model.addObject("address", address.getAddress());
 
         return model;
 
@@ -52,7 +52,7 @@ public class PrintController {
         ModelAndView model = new ModelAndView("printDelta");
         model.addObject("isCorrect", isLastPokazaniaListCorrect());
         model.addObject("pokazaniaPair", getPokazaniaPairList());
-        model.addObject("address", address);
+        model.addObject("address", address.getAddress());
 
         return model;
 
@@ -64,7 +64,7 @@ public class PrintController {
         ModelAndView model = new ModelAndView("printAndPrices");
         model.addObject("isCorrect", isLastPokazaniaListCorrect());
         model.addObject("pokazaniaAndPrices", getLastUsedDeltaList());
-        model.addObject("address", address);
+        model.addObject("address", address.getAddress());
 
         return model;
 

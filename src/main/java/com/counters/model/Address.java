@@ -1,28 +1,45 @@
 package com.counters.model;
 
-import org.springframework.beans.factory.annotation.Required;
+import com.counters.model.DAO.config.Db;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by adementiev on 26.10.14.
  */
 
-@Service
+@Component
 public class Address {
 
+    private final Map<String, String> addresses = new HashMap();
 
-    @Bean
-    @ConditionalOnProperty(name = "spring.profiles.active", havingValue = "db1")
-    public String getAddress1(@Value("${db1.address}") String address) {
+    @Autowired
+    private String address;
+
+    @Value("${db1.address}")
+    private String address1;
+
+    @Value("${db2.address}")
+    private String address2;
+
+    public Map getAddresses() {
+        if (addresses.size() == 0) {
+            addresses.put(address1, Db.DB1.getName());
+            addresses.put(address2, Db.DB2.getName());
+        }
+        return addresses;
+    }
+
+    public String getAddress() {
         return address;
     }
 
-    @Bean
-    @ConditionalOnProperty(name = "spring.profiles.active", havingValue = "db2")
-    public String getAddress2(@Value("${db2.address}") String address) {
-        return address;
+    public void setAddress(String address) {
+        this.address = address;
     }
+
 }

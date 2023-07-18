@@ -1,5 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="java.util.*" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
     <meta charset="utf-8"/>
@@ -59,6 +61,22 @@
         <td height="100">
             <h3>${address}</h3>
         </td>
+    </tr>
+    <tr>
+        <form class="form-horizontal pull-left"
+              accept-charset="UTF-8" method="POST" action="/">
+            <div class="form-group">
+                <label for="selectCounter" class="col-sm-2 control-label">Адрес</label>
+                <div class="col-sm-10">
+                    <select class="form-control" id="selectAddress" name="selectAddress">
+                        <c:forEach var="listVal" items="${addresses}">
+                            <option>${listVal} </option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-default">Выбрать адрес</button>
+            </div>
+        </form>
     </tr>
     <tr>
         <td height="50"><a href="data">Новые показания</a></td>

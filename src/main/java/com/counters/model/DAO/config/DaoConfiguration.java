@@ -38,7 +38,7 @@ public class DaoConfiguration {
     @Bean
     @Primary
     @Profile("db1")
-    @ConfigurationProperties(prefix="db1.datasource")
+    @ConfigurationProperties(prefix = "db1.datasource")
     public DataSource dataMysql1Source() {
         return DataSourceBuilder.create().build();
     }
@@ -46,10 +46,10 @@ public class DaoConfiguration {
     @Bean
     @Primary
     @Profile("db2")
-    @ConfigurationProperties(prefix="db2.datasource")
+    @ConfigurationProperties(prefix = "db2.datasource")
     public DataSource dataMysql2Source() {
         return DataSourceBuilder.create().build();
-       }
+    }
 
     @Bean
     @Autowired
@@ -58,7 +58,6 @@ public class DaoConfiguration {
         txManager.setSessionFactory(sessionFactory);
         return txManager;
     }
-
 
     @Bean
     @Autowired
@@ -69,6 +68,7 @@ public class DaoConfiguration {
         props.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
         props.setProperty("hibernate.hbm2ddl.auto", "validate");
         props.setProperty("hibernate.show_sql", "false");
+        props.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
         sessionFactoryBean.setHibernateProperties(props);
         sessionFactoryBean.setPackagesToScan("com.counters.model");
         return sessionFactoryBean;
