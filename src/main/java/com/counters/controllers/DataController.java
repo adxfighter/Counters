@@ -51,7 +51,7 @@ public class DataController {
 
         List<Counter> counterList = counterBO.getListOfCounters();
 
-        Map<String,Double> pokazanieMap = getLastPokazaniaMap(counterList);
+        Map<String, Double> pokazanieMap = getLastPokazaniaMap(counterList);
 
         model.addObject("lastPokazaniaMap", pokazanieMap);
 
@@ -59,8 +59,8 @@ public class DataController {
 
     }
 
-    private Map<String,Double> getLastPokazaniaMap(List<Counter> counterList) {
-        Map<String,Double> pokazanieMap = new HashMap<>();
+    private Map<String, Double> getLastPokazaniaMap(List<Counter> counterList) {
+        Map<String, Double> pokazanieMap = new HashMap<>();
 
         counterList.stream().forEach(counter -> {
             try {
@@ -99,7 +99,6 @@ public class DataController {
 
     @RequestMapping(value = "/addData", method = RequestMethod.POST)
     public String addData(@ModelAttribute("data") Pokazanie pokazanie, ModelMap model, HttpServletRequest request) throws SQLException, ParseException {
-
 
         String counterName = request.getParameter("selectCounter");
         Counter counter = counterBO.getCounterByName(counterName);
@@ -232,6 +231,39 @@ public class DataController {
         return model;
     }
 
+    @RequestMapping(value = "/insertAvgData", method = RequestMethod.GET)
+    public ModelAndView insertAvgData(HttpServletRequest request) throws SQLException {
+        ModelAndView model = new ModelAndView("insertAvgData");
+
+        List<Counter> counters = counterBO.getListOfCounters();
+        List<Pokazanie> pokazania;
+        List<Pokazanie> avgPokazania = new ArrayList<>();
+        Pokazanie pokazanie;
+        Double avgData;
+        Integer avgDataInt;
+
+        Calendar calendar = new GregorianCalendar();
+        Date simpleDate = calendar.getTime();
+        java.sql.Date sqlDate = new java.sql.Date(simpleDate.getTime());
+
+        int months = 3;
+
+        for (int i = 0; i < counters.size(); i++) {
+            pokazania = pokazanieBO.getPokazaniaByCounter(counters.get(i));
+            avgData = pokazania.get(0).getData() + (pokazania.get(0).getData() - pokazania.get(months - 1).getData()) / months;
+            avgDataInt = avgData.intValue();
+            pokazanie = new Pokazanie(counters.get(i), avgDataInt.doubleValue(), sqlDate);
+            pokazanieBO.addPokazanie(pokazanie);
+            avgPokazania.add(pokazanie);
+        }
+
+        model.addObject("selectedItems",
+                avgPokazania.stream().map(Pokazanie::getData).
+                        toArray(Double[]::new));
+
+        return model;
+    }
+
     @RequestMapping(value = "/deleteDataInfo", method = RequestMethod.POST)
     public ModelAndView deletePokazaniaInfo(HttpServletRequest request) throws SQLException {
 
@@ -251,25 +283,25 @@ public class DataController {
 
     }
 
-    private Pokazanie getPokazanieById(Integer id){
+    private Pokazanie getPokazanieById(Integer id) {
         try {
             return pokazanieBO.getPokazanieById(id);
         } catch (SQLException e) {
-            logger.log(Level.SEVERE,e.getMessage(),e);
+            logger.log(Level.SEVERE, e.getMessage(), e);
             return null;
         }
 
     }
 
-    private void deletePokazanie(Pokazanie pokazanie){
+    private void deletePokazanie(Pokazanie pokazanie) {
         try {
             pokazanieBO.deletePokazanie(pokazanie);
         } catch (SQLException e) {
-            logger.log(Level.SEVERE,e.getMessage(),e);
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
-    private String itemDescription(Pokazanie pokazanie){
+    private String itemDescription(Pokazanie pokazanie) {
         return pokazanie.getData() + " от " + pokazanie.getDate().toString() + " счетик: " + pokazanie.getCounter().getCounterName();
     }
 
@@ -319,12 +351,12 @@ public class DataController {
         return model;
     }
 
-    private void updatePokazanie(Pokazanie pokazanie){
+    private void updatePokazanie(Pokazanie pokazanie) {
         try {
             pokazanie.setIsPaid(!pokazanie.getIsPaid());
             pokazanieBO.updatePokazanie(pokazanie);
         } catch (SQLException e) {
-            logger.log(Level.SEVERE,e.getMessage(),e);
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
