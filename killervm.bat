@@ -1,0 +1,1 @@
+"C:\Program Files\Oracle\VirtualBox\VBoxManage.exe" controlvm "Tomcat" poweroff --type headless

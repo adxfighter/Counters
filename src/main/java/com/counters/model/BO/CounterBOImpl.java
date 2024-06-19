@@ -24,6 +24,12 @@ public class CounterBOImpl implements CounterBO {
 
     }
 
+    public void updateCounter(Counter counter) throws SQLException {
+
+        counterDAO.updateCounter(counter);
+
+    }
+
     public List<Counter> getAllCounters() throws SQLException {
 
         return counterDAO.getAllCounters();

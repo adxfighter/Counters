@@ -44,7 +44,7 @@
 
 <div class="container common-template">
 
-    <form class="form-horizontal pull-left" target="_blank"
+    <form class="form-horizontal pull-left"
           accept-charset="UTF-8" method="POST" action="addPrice">
 
         <div class="form-group">

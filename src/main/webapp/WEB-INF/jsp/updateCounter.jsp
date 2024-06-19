@@ -1,12 +1,15 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="java.util.*" %>
-<html>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page pageEncoding="UTF-8" %>
+<HTML>
+<BODY>
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Тарифы</title>
+    <title>Добавление счетчика</title>
     <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
     <link href="/css/common-template.css" rel="stylesheet" media="screen"/>
 </head>
@@ -31,14 +34,34 @@
         </div>
     </div>
 </nav>
-<body>
-<h2>Операции с тарифами</h2>
-<br>
+<h2>Редактирование счетчика счетчика</h2>
+<% request.setCharacterEncoding("UTF-8");
+    response.setContentType("text/html;charset=UTF-8");
+    response.setCharacterEncoding("UTF-8");%>
+<form:form method="POST" action="updateCounterInfo">
 
-<a href="price">Новый тариф</a>
-<br><br><br>
-<a href="priceList">Удаление тарифов</a>
+    <table width="100%" border="1" align="center">
+        <tr><form:label path="counterName"><h3>Редактирование счетчика</h3></form:label></tr>
+        <tr>
+            <td>${counterNameOld}</td>
+        </tr>
+    </table>
+    <table width="100%" align="center">
+        <tr>
+            <form:label path="counterName"><h3>Новое название</h3></form:label>
+        </tr>
+        <tr>
+            <form:input path="counterName"/>
+        </tr>
+        <br>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Отредактировать счетчик"/>
+            </td>
+        </tr>
+    </table>
+</form:form>
 <br><br><br>
 <a href="./">Главная страница</a>
-</body>
-</html>
+</BODY>
+</HTML>

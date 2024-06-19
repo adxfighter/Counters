@@ -35,9 +35,10 @@
 <h2>Операции с тарифами</h2>
 <br>
 
-<a href="price">Новый тариф</a>
+<a href="counter">Добавить счетчик</a>
 <br><br><br>
-<a href="priceList">Удаление тарифов</a>
+<a href="counterList">Редактирование названия счетчика</a>
+
 <br><br><br>
 <a href="./">Главная страница</a>
 </body>

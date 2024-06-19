@@ -103,7 +103,7 @@
         <td height="50"><a href="sum">Сумма потребления по месяцам</a></td>
     </tr>
     <tr>
-        <td height="50"><a href="counter">Добавить счетчик</a></td>
+        <td height="50"><a href="counterIndex">Cчетчики</a></td>
     </tr>
     <tr>
         <td height="50"><a href="priceIndex">Тарифы</a></td>

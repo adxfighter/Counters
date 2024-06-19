@@ -1,14 +1,9 @@
 package com.counters.model.DAO;
 
 import com.counters.model.Counter;
-import org.hibernate.FetchMode;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate4.HibernateTemplate;
-import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,6 +18,17 @@ import java.util.logging.Logger;
 public class CounterDAOImpl extends AbstractEntityDAO implements CounterDAO {
 
     private static Logger logger = Logger.getLogger(CounterDAOImpl.class.getName());
+
+    public void updateCounter(Counter counter) {
+        Session session;
+        try {
+            session = getCurrentSession();
+            //update
+            session.update(counter);
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Exception during inserting: ", e);
+        }
+    }
 
     public void addCounter(Counter counter) {
         Session session;
@@ -49,24 +55,24 @@ public class CounterDAOImpl extends AbstractEntityDAO implements CounterDAO {
 
     public Counter getCounterByName(String counterName) throws SQLException {
         Session session;
-            session = getCurrentSession();
-            Query query = session.createQuery(
-                    "SELECT c FROM Counter c WHERE c.counterName = :counterName"
-            )
-                    .setString("counterName", counterName);
-            Counter counter = (Counter) query.list().get(0);
-            return counter;
+        session = getCurrentSession();
+        Query query = session.createQuery(
+                        "SELECT c FROM Counter c WHERE c.counterName = :counterName"
+                )
+                .setString("counterName", counterName);
+        Counter counter = (Counter) query.list().get(0);
+        return counter;
     }
 
     public List<Counter> getListOfCounters() throws SQLException {
         Session session;
-            session = getCurrentSession();
-            Query query = session.createQuery(
-                    "SELECT c FROM Counter c ORDER BY c.counterName"
-            );
-            List<Counter> counters = new ArrayList<Counter>();
-            counters = (List<Counter>) query.list();
-            return counters;
+        session = getCurrentSession();
+        Query query = session.createQuery(
+                "SELECT c FROM Counter c ORDER BY c.counterName"
+        );
+        List<Counter> counters = new ArrayList<Counter>();
+        counters = (List<Counter>) query.list();
+        return counters;
     }
 
     public Counter getCounterById(Integer id) throws SQLException {

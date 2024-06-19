@@ -1,12 +1,15 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="java.util.*" %>
+
+<%@ page import="java.util.List" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Тарифы</title>
+    <title>Выбор счетчиика для вывода списка тарифов</title>
     <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
     <link href="/css/common-template.css" rel="stylesheet" media="screen"/>
 </head>
@@ -31,14 +34,25 @@
         </div>
     </div>
 </nav>
-<body>
-<h2>Операции с тарифами</h2>
-<br>
+<h2>Выбор счетчика для редактирования</h2>
+<form:form method="POST" action="updateCounter">
+    <table>
+        <tr>
+            <td><form:label path="counterName">Выбирете счетчик</form:label></td>
+            <td><select name="selectCounter" size="1">
+                <c:forEach var="listVal" items="${listCountersNames}">
 
-<a href="price">Новый тариф</a>
-<br><br><br>
-<a href="priceList">Удаление тарифов</a>
-<br><br><br>
-<a href="./">Главная страница</a>
+                    <option>${listVal} </option>
+                </c:forEach>
+            </select></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Выбрать"/>
+            </td>
+            <td><a href="./">Главная страница</a></td>
+        </tr>
+    </table>
+</form:form>
 </body>
 </html>

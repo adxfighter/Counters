@@ -14,6 +14,8 @@ public interface CounterDAO {
 
     void addCounter(Counter counter) throws SQLException;
 
+    void updateCounter(Counter counter) throws SQLException;
+
     List<Counter> getAllCounters() throws SQLException;
 
     Counter getCounterByName(String counterName) throws SQLException;

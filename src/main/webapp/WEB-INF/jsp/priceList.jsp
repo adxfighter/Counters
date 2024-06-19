@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Выбор счетчиика для вывода списка тарифов</title>
+    <title>Выбор счетчика для вывода списка тарифов</title>
     <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
     <link href="/css/common-template.css" rel="stylesheet" media="screen"/>
 </head>
