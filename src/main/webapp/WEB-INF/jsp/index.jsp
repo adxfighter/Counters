@@ -82,9 +82,6 @@
         <td height="50"><a href="data">Новые показания</a></td>
     </tr>
     <tr>
-        <td height="50"><a href="insertAvgData">Ввести средние показания</a></td>
-    </tr>
-    <tr>
         <td height="50"><a href="print">Страница печати</a></td>
     </tr>
     <tr>
@@ -105,6 +102,9 @@
     <tr>
         <td height="50"><a href="sum">Сумма потребления по месяцам</a></td>
     </tr>
+        <tr>
+            <td height="50"><a href="insertAvgData">Ввести средние показания</a></td>
+        </tr>
     <tr>
         <td height="50"><a href="counterIndex">Cчетчики</a></td>
     </tr>

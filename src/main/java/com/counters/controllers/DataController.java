@@ -3,10 +3,7 @@ package com.counters.controllers;
 import com.counters.model.BO.CounterBO;
 import com.counters.model.BO.PokazanieBO;
 import com.counters.model.BO.PriceBO;
-import com.counters.model.Counter;
-import com.counters.model.Pokazanie;
-import com.counters.model.Price;
-import com.counters.model.UsedDelta;
+import com.counters.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -22,6 +19,8 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -233,7 +232,17 @@ public class DataController {
 
     @RequestMapping(value = "/insertAvgData", method = RequestMethod.GET)
     public ModelAndView insertAvgData(HttpServletRequest request) throws SQLException {
-        ModelAndView model = new ModelAndView("insertAvgData");
+
+        ModelAndView model = new ModelAndView("insertAvgData", "command", new Months());
+
+        return model;
+    }
+
+    @RequestMapping(value = "/insertAvgDataInfo", method = RequestMethod.POST)
+    public ModelAndView insertAvgDataInfo(HttpServletRequest request) throws SQLException {
+        ModelAndView model = new ModelAndView("insertAvgDataInfo");
+
+        String intervalString = request.getParameter("interval");
 
         List<Counter> counters = counterBO.getListOfCounters();
         List<Pokazanie> pokazania;
@@ -246,11 +255,24 @@ public class DataController {
         Date simpleDate = calendar.getTime();
         java.sql.Date sqlDate = new java.sql.Date(simpleDate.getTime());
 
-        int months = 3;
+        LocalDate dateFrom;
+        LocalDate dateTo;
+        int daysToNow = 0;
+        int daysInterval = 0;
+
+        Integer interval = Integer.parseInt(intervalString);
 
         for (int i = 0; i < counters.size(); i++) {
             pokazania = pokazanieBO.getPokazaniaByCounter(counters.get(i));
-            avgData = pokazania.get(0).getData() + (pokazania.get(0).getData() - pokazania.get(months - 1).getData()) / months;
+
+            if (i == 0) {
+                dateFrom = pokazania.get(interval - 1).getDate().toLocalDate();
+                dateTo = pokazania.get(0).getDate().toLocalDate();
+                daysInterval = (int) Duration.between(dateFrom.atStartOfDay(), dateTo.atStartOfDay()).toDays();
+                daysToNow = (int) Duration.between(dateTo.atStartOfDay(), sqlDate.toLocalDate().atStartOfDay()).toDays();
+            }
+
+            avgData = pokazania.get(0).getData() + (pokazania.get(0).getData() - pokazania.get(interval - 1).getData()) / daysInterval * daysToNow;
             avgDataInt = avgData.intValue();
             pokazanie = new Pokazanie(counters.get(i), avgDataInt.doubleValue(), sqlDate);
             pokazanieBO.addPokazanie(pokazanie);
@@ -258,8 +280,8 @@ public class DataController {
         }
 
         model.addObject("selectedItems",
-                avgPokazania.stream().map(Pokazanie::getData).
-                        toArray(Double[]::new));
+                avgPokazania.stream().map(this::itemDescription).
+                        toArray(String[]::new));
 
         return model;
     }
