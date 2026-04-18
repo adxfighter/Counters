@@ -102,6 +102,26 @@ public class PokazanieDAOImpl extends AbstractEntityDAO implements PokazanieDAO 
             return pokazania;
     }
 
+    public Pokazanie getPokazaniaByCounterAndDate(Counter counter, java.sql.Date date) throws SQLException {
+        Session session;
+        Pokazanie pokazanie;
+            session = getCurrentSession();
+            Integer counterId = counter.getId();
+            Query query = session.createQuery(
+                    "SELECT p FROM Pokazanie p WHERE p.counter.id = :counterId and p.date = :date"
+            )
+                    .setInteger("counterId", counterId)
+                    .setDate("date", date);
+            try {
+                pokazanie = (Pokazanie) query.list().get(0);
+            }
+            catch (IndexOutOfBoundsException exception) {
+                pokazanie = null;
+            }
+
+            return pokazanie;
+    }
+
     public Pokazanie getLastPokazanieByCounter(Counter counter) throws SQLException {
         Session session;
         Pokazanie pokazanie;

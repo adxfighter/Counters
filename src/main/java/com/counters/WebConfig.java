@@ -53,6 +53,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
         registry.addResourceHandler("/css/**") //
                 .addResourceLocations("classpath:/css/");
+
+        registry.addResourceHandler("/webjars/**") //
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
     @Override

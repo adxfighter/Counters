@@ -25,6 +25,9 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import static com.counters.controllers.ControllersUtils.getAllCountersNames;
 
 @Controller
@@ -379,6 +382,97 @@ public class DataController {
             pokazanieBO.updatePokazanie(pokazanie);
         } catch (SQLException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
+        }
+    }
+
+    @RequestMapping(value = "/chartData", method = RequestMethod.GET)
+    @ResponseBody
+    public String getChartData() throws SQLException {
+        logger.info("chartData endpoint called");
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> chartData = new HashMap<>();
+
+        List<Counter> counters = counterBO.getListOfCounters();
+        logger.info("Found counters: " + counters.size());
+
+        if (counters.isEmpty()) {
+            return "{\"labels\":[],\"datasets\":{},\"counterNames\":[],\"totalSums\":[]}";
+        }
+
+        Set<java.sql.Date> allDates = new LinkedHashSet<>();
+        for (Counter counter : counters) {
+            List<Pokazanie> pokazania = pokazanieBO.getPokazaniaByCounter(counter);
+            for (Pokazanie p : pokazania) {
+                allDates.add(new java.sql.Date(p.getDate().getTime()));
+            }
+        }
+
+        List<java.sql.Date> sortedDates = new ArrayList<>(allDates);
+        Collections.sort(sortedDates);
+        logger.info("Sorted dates: " + sortedDates.size());
+
+        List<String> labels = new ArrayList<>();
+        for (int i = 1; i < sortedDates.size(); i++) {
+            labels.add(sortedDates.get(i).toString());
+        }
+
+        Map<String, List<Double>> datasetsMap = new HashMap<>();
+
+        for (Counter counter : counters) {
+            logger.info("Processing counter: " + counter.getCounterName());
+            List<Pokazanie> allPokazania = pokazanieBO.getPokazaniaByCounter(counter);
+            List<Double> sums = new ArrayList<>();
+
+            for (int i = 1; i < sortedDates.size(); i++) {
+                java.sql.Date earlyDate = sortedDates.get(i - 1);
+                java.sql.Date laterDate = sortedDates.get(i);
+
+                Pokazanie pokazanieEarly = pokazanieBO.getPokazaniaByCounterAndDate(counter, earlyDate);
+                Pokazanie pokazanieLater = pokazanieBO.getPokazaniaByCounterAndDate(counter, laterDate);
+
+                double sum = 0.0;
+                if (pokazanieEarly != null && pokazanieLater != null) {
+                    double delta = pokazanieLater.getData() - pokazanieEarly.getData();
+                    double potracheno = delta < 0 ? pokazanieLater.getData() : delta;
+                    logger.info("Counter " + counter.getCounterName() + ", early=" + pokazanieEarly.getData() + ", later=" + pokazanieLater.getData() + ", delta=" + delta);
+                    Price price = priceBO.getPriceByCounterAndDate(counter, laterDate);
+                    if (price != null) {
+                        sum = new BigDecimal(price.getPrice() * potracheno).setScale(1, RoundingMode.UP).doubleValue();
+                    }
+                }
+                sums.add(sum);
+            }
+
+            datasetsMap.put(counter.getCounterName(), sums);
+            logger.info("Counter " + counter.getCounterName() + " sums: " + sums);
+        }
+
+        List<Double> totalSums = new ArrayList<>();
+        for (int i = 1; i < sortedDates.size(); i++) {
+            double monthSum = 0.0;
+            for (Counter counter : counters) {
+                List<Double> counterSums = datasetsMap.get(counter.getCounterName());
+                if (counterSums != null && i - 1 < counterSums.size()) {
+                    monthSum += counterSums.get(i - 1);
+                }
+            }
+            totalSums.add(new BigDecimal(monthSum).setScale(1, RoundingMode.UP).doubleValue());
+        }
+
+        datasetsMap.put("Общая сумма", totalSums);
+
+        chartData.put("labels", labels);
+        chartData.put("datasets", datasetsMap);
+        chartData.put("totalSums", totalSums);
+        chartData.put("counterNames", counters.stream().map(Counter::getCounterName).toArray(String[]::new));
+
+        try {
+            String json = mapper.writeValueAsString(chartData);
+            logger.info("Chart data JSON length: " + json.length());
+            return json;
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error creating JSON", e);
+            return "{\"error\":\"Unable to create chart data\"}";
         }
     }
 

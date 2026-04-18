@@ -20,6 +20,7 @@ public interface PokazanieDAO {
     Pokazanie getLastPokazanieByCounter(Counter counter) throws SQLException;
     Pokazanie getFirstPokazanie() throws SQLException;
     List<Pokazanie> getPokazaniaByDate(java.sql.Date date) throws SQLException;
+    Pokazanie getPokazaniaByCounterAndDate(Counter counter, java.sql.Date date) throws SQLException;
     Pokazanie getPokazanieById(Integer id) throws SQLException;
 
 }

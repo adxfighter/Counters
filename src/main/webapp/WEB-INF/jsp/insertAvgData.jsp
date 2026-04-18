@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Введите число месяцев для расчета средних показаний</title>
+    <title>Заполнение показаний по средним значениям автоматически</title>
     <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
     <link href="/bootstrap/js/bootstrap.min.js" rel="stylesheet" media="screen"/>
     <link href="/css/jquery.dataTables.min.css" rel="stylesheet" media="screen"/>

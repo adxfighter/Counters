@@ -102,6 +102,9 @@
     <tr>
         <td height="50"><a href="sum">Сумма потребления по месяцам</a></td>
     </tr>
+    <tr>
+        <td height="50"><a href="chart">График потребления</a></td>
+    </tr>
         <tr>
             <td height="50"><a href="insertAvgData">Ввести средние показания</a></td>
         </tr>

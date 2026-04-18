@@ -21,4 +21,5 @@ public interface PokazanieBO {
     Pokazanie getFirstPokazanie() throws SQLException;
     Pokazanie getPokazanieById(Integer id) throws SQLException;
     List<Pokazanie> getPokazaniaByDate(java.sql.Date date) throws SQLException;
+    Pokazanie getPokazaniaByCounterAndDate(Counter counter, java.sql.Date date) throws SQLException;
 }

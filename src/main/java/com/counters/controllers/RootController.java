@@ -53,4 +53,10 @@ public class RootController {
 
         return model;
     }
+
+    @RequestMapping(value = "/chart", method = RequestMethod.GET)
+    public ModelAndView chart() throws SQLException {
+        ModelAndView model = new ModelAndView("chart");
+        return model;
+    }
 }

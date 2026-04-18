@@ -47,6 +47,11 @@ public class PokazanieBOImpl implements PokazanieBO {
     public List<Pokazanie> getPokazaniaByDate (java.sql.Date date) throws SQLException {
         return pokazanieDAO.getPokazaniaByDate (date);
     }
+
+    public Pokazanie getPokazaniaByCounterAndDate(Counter counter, java.sql.Date date) throws SQLException {
+        return pokazanieDAO.getPokazaniaByCounterAndDate(counter, date);
+    }
+
     public Pokazanie getLastPokazanieByCounter(Counter counter) throws SQLException {
         return pokazanieDAO.getLastPokazanieByCounter(counter);
     }
